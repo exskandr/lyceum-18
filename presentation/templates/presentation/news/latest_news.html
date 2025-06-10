@@ -1,0 +1,9 @@
+<ul>
+{% for news in latest_news %}
+<li>
+<img src="{{ news.main_image.url }}" alt="{{ news.title }}" style="width:150px;"><br>
+<a href="{{ news.get_absolute_url }}">{{ news.title }}</a><br>
+
+</li>
+{% endfor %}
+</ul>

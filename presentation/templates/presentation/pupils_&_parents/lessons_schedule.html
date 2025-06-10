@@ -1,0 +1,18 @@
+{% load news_tags %}
+
+<h1>Розклад уроків для <b>{{ clas }}</b> класу</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th>урок</th>
+    <th>домашнє завдання</th>
+  </tr>
+    {% for key, value in schedule.items %}
+  <tr>
+    <td>{{key}} </td>
+    <td>{{value.0}}</td>
+    <td>{{value.1}}</td>
+  </tr>
+     {% endfor %}
+</table>

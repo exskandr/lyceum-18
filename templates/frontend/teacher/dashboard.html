@@ -1,0 +1,55 @@
+{# templates/frontend/teacher/dashboard.html #}
+{% extends 'base.html' %}
+
+{% block title %}Панель Вчителя{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Панель Вчителя: {{ teacher.user.get_full_name }}</h1>
+
+{% if teacher.curator %}
+<div class="alert alert-info">
+    Ви є класним керівником {{ teacher.curator.full_name }}!
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">Викладаючі предмети</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for subject in teaching_subjects %}
+                        <li class="list-group-item">{{ subject.name }}</li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">Ви поки не викладаєте жодного предмету.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">Мої Класи</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for class_obj in teaching_classes %}
+                        <li class="list-group-item">
+                            {{ class_obj.full_name }} ({{ class_obj.start_year }} р. початку)
+                            <div class="mt-2">
+                                {% for subject in teaching_subjects %}
+                                    <a href="{% url 'teacher_journal' class_id=class_obj.id subject_id=subject.id %}" class="btn btn-sm btn-outline-primary mb-1">
+                                        Журнал {{ subject.name }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">Ви поки не викладаєте у жодному класі.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

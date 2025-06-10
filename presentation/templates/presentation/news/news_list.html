@@ -1,0 +1,27 @@
+{% load news_tags %}
+
+<h1>Новини</h1>
+{% if tag %}
+<h2>Posts tagged with "{{ tag.name }}"</h2>
+{% endif %}
+<ul>
+    {% for item in news %}
+    <li>
+        <a href="{{ item.get_absolute_url }}">
+            <img src="{{ item.main_image.url }}" alt="{{ item.title }}" style="width:150px;">
+            <h2>{{ item.title }}</h2>
+        </a>
+        <p class="tags">Tags:
+            {% for tag in item.tags.all %}
+                <a href="{% url "news:news_list_by_tag" tag.slug %}">
+                {{ tag.name }}
+                </a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        <p>Автор: {{ item.author }} | Дата: {{ item.publish }}</p>
+    </li>
+    {% endfor %}
+</ul>
+<h3>Latest news</h3>
+{% show_latest_news 2 %}
+{% include "pagination.html" with page=news %}

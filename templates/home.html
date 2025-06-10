@@ -1,0 +1,24 @@
+{# templates/home.html #}
+{% extends 'base.html' %}
+
+{% block title %}Домашня сторінка Ліцею{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Ласкаво просимо до Шкільного Журналу!</h1>
+    <p class="lead">Це ваш централізований портал для управління навчальним процесом.</p>
+    <hr class="my-4">
+    <p>Будь ласка, увійдіть, щоб отримати доступ до вашого робочого простору.</p>
+    {% if not user.is_authenticated %}
+        <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button">Увійти</a>
+    {% else %}
+        {% if user.is_teacher_role or user.is_curator_role %}
+            <a class="btn btn-primary btn-lg" href="{% url 'teacher_dashboard' %}" role="button">Панель Вчителя</a>
+        {% elif user.is_student_role %}
+            <a class="btn btn-success btn-lg" href="{% url 'student_dashboard' %}" role="button">Панель Учня</a>
+        {% elif user.is_parent_role %}
+            <a class="btn btn-info btn-lg" href="{% url 'parent_dashboard' %}" role="button">Панель Батьків</a>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

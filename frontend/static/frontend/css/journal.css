@@ -1,0 +1,57 @@
+.table-journal thead th {
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+    position: relative;
+}
+.table-journal tbody td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 3px;
+}
+.rotate-text {
+    white-space: nowrap;
+    position: absolute;
+    left: 50%;
+    top: 100;
+    transform: translateX(-50%) rotate(-90deg);
+    transform-origin: top center;
+    height: 100px; /* Adjust as needed */
+    width: 20px; /* Adjust as needed */
+    line-height: 20px;
+    font-size: 0.8em;
+}
+.date-header-cell {
+    min-width: 30px; /* Adjust width for rotated text */
+    height: 120px; /* Ensure enough height for rotated text */
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+.grade-input, .attendance-checkbox {
+    width: 100%;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 2px;
+    box-sizing: border-box;
+}
+.grade-input {
+    max-width: 40px;
+}
+.grade-cell {
+    position: relative;
+}
+.grade-type-select, .group-select {
+    font-size: 0.7em;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+}
+.hidden-form-elements {
+    display: none; /* Hide hidden inputs in cell */
+}
+.save-button {
+    display: block;
+    margin-top: 5px;
+}

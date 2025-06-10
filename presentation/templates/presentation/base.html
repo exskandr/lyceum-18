@@ -1,0 +1,104 @@
+{% load news_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyceum_18</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+       <!-- nav ul { list-style-type: none; }
+        nav ul li { display: inline; margin-right: 10px; } -->
+        nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    position: relative;
+}
+
+nav ul li a {
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+}
+
+nav ul li ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f9f9f9;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li:hover ul {
+    display: block;
+}
+
+nav ul li ul li {
+    display: block;
+}
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            {% for key, category in navbar.items %}
+                <li>
+                    <a href="#" class="nav-link" data-url="{{ category.url }}">{{ category.label }}</a>
+                    {% if category.sub_items %}
+                        <ul>
+                            {% for item in category.sub_items %}
+                                <li>
+                                    <a href="#" class="sub-link" data-url="{{ item.url }}">{{ item.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        <ul>
+    {% for item in navbar_items %}
+        <li>
+            {% if item.dynamic_page %}
+                <a href="{{ item.dynamic_page.get_absolute_url }}">{{ item.name }}</a>
+            {% elif item.url %}
+                <a href="{{ item.url }}" target="_blank">{{ item.name }}</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+    </nav>
+    <main id="content">
+<p>
+<a href="{% url "news:news_feed" %}">
+Subscribe to my RSS feed
+</a>
+</p>
+<h3>Latest news</h3>
+{% show_latest_news 2 %}
+</main>
+
+    <script>
+        $(document).ready(function () {
+            // Обробка кліків по посиланнях у Navbar
+            $('.nav-link, .sub-link').click(function (e) {
+                e.preventDefault();
+                const url = $(this).data('url'); // Отримати URL
+                $('#content').load(url); // Завантажити контент через AJAX
+            });
+
+            // Завантажити головну сторінку за замовчуванням
+            $('#content').load('/home/');
+        });
+    </script>
+</body>
+</html>

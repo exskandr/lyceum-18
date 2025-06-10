@@ -1,0 +1,36 @@
+{% load news_tags %}
+
+<h1>{{ news.title }}</h1>
+<p><img src="{{ news.main_image.url }}" alt="{{ news.title }}" style="width:300px;"></p>
+<p><strong>Автор:</strong> {{ news.author }}</p>
+<p><strong>Дата створення:</strong> {{ news.publish }}</p>
+
+<h2>Текст новини</h2>
+<p>{{ news.content }}</p>
+
+{% if news.photos.all %}
+    <h3>Фото</h3>
+    <ul>
+        {% for photo in news_.photos.all %}
+        <li><img src="{{ photo.image.url }}" alt="{{ photo.description }}" style="width:200px;"></li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if news.videos.all %}
+    <h3>Відео</h3>
+    <ul>
+        {% for video in news.videos.all %}
+        <li><iframe src="{{ video.video_url }}" width="560" height="315" frameborder="0" allowfullscreen></iframe></li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<h2>Similar News</h2>
+{% for item in similar_news %}
+    <p>
+        <a href="{{ item.get_absolute_url }}">{{ item.title }}</a>
+    </p>
+{% empty %}
+    There are no similar news yet.
+{% endfor %}

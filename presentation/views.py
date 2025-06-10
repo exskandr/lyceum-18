@@ -1,0 +1,121 @@
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Count
+from taggit.models import Tag
+from .models import News, NavbarSubItem, DynamicPage
+from django.views.generic import DetailView
+
+
+class DynamicPageView(DetailView):
+    model = DynamicPage
+    template_name = 'presentation/dynamic_page.html'
+    context_object_name = 'page'
+
+    def get_object(self):
+        return get_object_or_404(DynamicPage, slug=self.kwargs['slug'])
+
+
+def home(request):
+    sub_items = NavbarSubItem.objects.all().order_by('order')
+    navbar = {}
+    for category, label in NavbarSubItem.MAIN_CATEGORIES:
+        navbar[category] = {
+            'label': label,
+            'sub_items': sub_items.filter(category=category),
+        }
+    return render(
+        request,
+        'presentation/base.html',
+        {'navbar': navbar}
+    )
+
+
+def news_list(request, tag_slug=None):
+    news_list = News.published.all()   # Отримуємо всі новини, сортуємо по даті
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        news_list = news_list.filter(tags__in=[tag])
+    # Pagination with 3 news per page
+    news_by = 3
+    paginator = Paginator(news_list, news_by)
+    page_number = request.GET.get('page', 1)
+    try:
+        news = paginator.page(page_number)
+    except PageNotAnInteger:
+        # If page_number is not an integer get the first page
+        news = paginator.page(1)
+    except EmptyPage:
+        # If page_number is out of range get last page of results
+        news = paginator.page(paginator.num_pages)
+
+    return render(
+        request,
+        'presentation/news/news_list.html',
+        {'news': news, 'tag': tag}
+    )
+
+
+def news_detail(request, year, month, day, news):
+    news = get_object_or_404(
+        News,
+        status=News.Status.PUBLISHED,
+        slug=news,
+        publish__year=year,
+        publish__month=month,
+        publish__day=day
+    )
+
+    # List of similar posts
+    news_tags_ids = news.tags.values_list('id', flat=True)
+    similar_news = News.published.filter(
+        tags__in=news_tags_ids
+    ).exclude(id=news.id)
+    similar_news = similar_news.annotate(
+        same_tags=Count('tags')
+    ).order_by('-same_tags', '-publish')[:4]
+
+    return render(
+        request,
+        'presentation/news/news_detail.html',
+        {
+            'news': news,
+            'similar_news': similar_news
+        },
+    )
+
+
+def call_schedule(request):
+    schedule = {
+        1: [8.30, 9.15],
+        2: [9.25, 10.10],
+        3: [10.30, 11.15],
+        4: [11.35, 12.20],
+        5: [12.30, 13.15],
+        6: [13.25, 14.10],
+        7: [14.15, 15.00]
+    }
+    return render(
+        request,
+        'presentation/pupils_&_parents/calls_schedule.html',
+        {'schedule': schedule}
+    )
+
+
+def lessons_schedule(request):
+    clas = "8-A"
+    schedule = {
+        1: ["Українська мова", "с. 123 вправа 234"],
+        2: ["Фізичне виховання", "форма"],
+        3: ["Алгебра", "№123, 126"],
+        4: ["Інформатика", "Зошит"],
+        5: ["Біологія", "Зошит"],
+        6: ["Хімія", "с. 134"],
+        7: ["фізика", "с. 145"]
+    }
+    return render(
+        request,
+        'presentation/pupils_&_parents/lessons_schedule.html',
+        {'schedule': schedule, 'clas': clas}
+    )
+

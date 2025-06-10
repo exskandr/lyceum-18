@@ -1,0 +1,11 @@
+{# templates/admin/core/schoolclass/change_list.html #}
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools-items %}
+    <li>
+        <a href="{% url 'admin:update_class_statuses' %}" class="addlink" style="background-color: #28a745; color: white; padding: 8px 12px; border-radius: 5px;">
+            Оновити статуси класів
+        </a>
+    </li>
+    {{ block.super }}
+{% endblock %}
