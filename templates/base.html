@@ -86,7 +86,12 @@
                         <span class="nav-link">Привіт, {{ user.get_full_name|default:user.username }}!</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Вийти</a>
+                      <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                      {% csrf_token %}
+                        <button type="submit" class="btn btn-link nav-link">
+                            Вийти
+                        </button>
+                      </form>
                     </li>
                 {% else %}
                     <li class="nav-item">

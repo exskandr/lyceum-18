@@ -112,8 +112,8 @@ AUTH_USER_MODEL = 'users.User'
 # login redirect
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/logout/'
-LOGOUT_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/'
+LOGOUT_URL = '/'
 
 
 # Internationalization

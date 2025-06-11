@@ -20,13 +20,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', include('presentation.urls', namespace='news')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'), # Домашня сторінка ліцею
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    # path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('teacher/', include('frontend.urls')), # Включаємо URL-и додатку frontend
     # path('student/', include('frontend.urls')), # Додасте пізніше
     # path('parent/', include('frontend.urls')), # Додасте пізніше
