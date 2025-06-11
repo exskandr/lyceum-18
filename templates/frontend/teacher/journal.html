@@ -6,7 +6,6 @@
 {% block title %}Журнал: {{ school_class.full_name }} - {{ subject.name }}{% endblock %}
 
 {% block extra_head %}
-{# Посилаємося на зовнішній CSS-файл #}
 <link rel="stylesheet" href="{% static 'frontend/css/journal.css' %}">
 {% endblock %}
 
@@ -21,25 +20,24 @@
             <tr>
                 <th rowspan="2" style="min-width: 150px;">Учень</th>
                 {% for lesson in lessons %}
-                    <th colspan="2" class="date-header-cell">
+                    <th class="date-header-cell" data-lesson-id="{{ lesson.id }}"> {# Додано data-lesson-id для зручності JS #}
                         <div class="rotate-text">
                             {{ lesson.date|date:"d.m" }}
                             <br>
                             <small>{{ lesson.lesson_topic.topic|truncatechars:20 }}</small>
                             <br>
-                            <small>{{ lesson.get_lesson_topic_display }}</small>
-                            <br>
+                            {# lesson.get_lesson_topic_display БУЛО ВИДАЛЕНО, використовуємо topic напряму або адаптуємо #}
+<!--                            <small>{{ lesson.lesson_topic.topic }}</small>-->
+<!--                            <br>-->
+                            {% if lesson.lesson_topic.group %} {# Показуємо групу, якщо вона є #}
+                                <small>Гр. {{ lesson.lesson_topic.group }}</small>
+                                <br>
+                            {% endif %}
                             <small>ДЗ: {{ lesson.lesson_topic.homework|truncatechars:20 }}</small>
                         </div>
                     </th>
                 {% empty %}
-                    <th colspan="2">Уроків за обраний період немає.</th>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for lesson in lessons %}
-                    <th style="min-width: 50px;">Оцінка</th>
-                    <th style="min-width: 30px;">Відс.</th>
+                    <th>Уроків за обраний період немає.</th>
                 {% endfor %}
             </tr>
         </thead>
@@ -48,65 +46,62 @@
                 <tr>
                     <td class="text-left">{{ student.user.get_full_name }}</td>
                     {% for lesson in lessons %}
-                        {# Використовуємо get_item для доступу до вкладених defaultdicts #}
-                        {% with grades_by_lesson_for_student=grades_by_student_lesson|get_item:student.pk %}
-                        {% with grades_for_this_lesson=grades_by_lesson_for_student|get_item:lesson.id %}
-                        {# Отримуємо конкретну оцінку поточного типу #}
-                        {% with current_grade_details=grades_for_this_lesson|get_item:current_grade_type %}
-                        <td class="grade-cell">
-                            {# Форма для оцінки #}
-                            <form class="grade-form" data-student-id="{{ student.pk }}" data-lesson-id="{{ lesson.id }}">
-                                {% csrf_token %}
-                                <input type="number" name="grade_value" class="form-control form-control-sm grade-input"
-                                       min="1" max="12"
-                                       value="{% if current_grade_details %}{{ current_grade_details.value }}{% endif %}"
-                                       placeholder="Оцінка">
-                                <select name="grade_type" class="form-control form-control-sm grade-type-select hidden-form-elements">
-                                    {% for type_key, type_display in grade_types_choices %}
-                                        <option value="{{ type_key }}"
-                                                {% if current_grade_details and current_grade_details.grade_type == type_key %}selected{% endif %}>
-                                            {{ type_display }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                <select name="grade_group" class="form-control form-control-sm group-select hidden-form-elements">
-                                    <option value="">Група</option>
-                                    {% for group_key, group_display in group_choices %}
-                                        <option value="{{ group_key }}"
-                                                {% if current_grade_details and current_grade_details.group == group_key %}selected{% endif %}>
-                                            {{ group_display }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                <input type="hidden" name="grade_id" value="{% if current_grade_details %}{{ current_grade_details.id }}{% endif %}">
-                                <button type="submit" class="btn btn-success btn-sm save-button hidden-form-elements">Зберегти</button>
-                            </form>
-                        </td>
-                        {% endwith %} {# End current_grade_details #}
+                        {# Отримуємо оцінку та відвідуваність для даного студента та уроку #}
+                        {% with grade_for_this_lesson=grades_by_student_lesson|get_item:student.pk|get_item:lesson.id %}
                         {% with attendance_for_this_lesson=attendance_by_student_lesson|get_item:student.pk|get_item:lesson.id %}
-                        <td>
-                            {# Форма для відвідуваності #}
-                            <form class="attendance-form" data-student-id="{{ student.id }}" data-lesson-id="{{ lesson.id }}">
-                                {% csrf_token %}
-                                <input type="checkbox" name="is_present" class="form-control attendance-checkbox"
-                                       {% if attendance_for_this_lesson and attendance_for_this_lesson.is_present %}checked{% endif %}>
-                                <input type="hidden" name="attendance_id" value="{% if attendance_for_this_lesson %}{{ attendance_for_this_lesson.id }}{% endif %}">
-                                <input type="text" name="reason" class="form-control form-control-sm hidden-form-elements"
-                                       placeholder="Причина відсутності"
-                                       value="{% if attendance_for_this_lesson and attendance_for_this_lesson.reason %}{{ attendance_for_this_lesson.reason }}{% endif %}">
-                                <button type="submit" class="btn btn-success btn-sm save-button hidden-form-elements">Збер.</button>
-                            </form>
+
+                        <td class="journal-cell" data-student-id="{{ student.pk }}" data-lesson-id="{{ lesson.id }}">
+                            <div class="display-mode">
+                                {# Цей вміст буде заповнено JavaScript #}
+                                <span class="placeholder">-</span>
+                            </div>
+
+                            <div class="edit-mode hidden">
+                                <form class="grade-form" data-student-id="{{ student.pk }}" data-lesson-id="{{ lesson.id }}">
+                                    {% csrf_token %}
+                                    <input type="number" name="grade_value" class="form-control form-control-sm grade-input"
+                                           min="1" max="12"
+                                           value="{% if grade_for_this_lesson %}{{ grade_for_this_lesson.value }}{% endif %}"
+                                           placeholder="Оцінка">
+                                    <select name="grade_type" class="form-control form-control-sm grade-type-select">
+                                        {% for type_key, type_display in grade_types_choices %}
+                                            <option value="{{ type_key }}"
+                                                    {% if grade_for_this_lesson and grade_for_this_lesson.grade_type == type_key %}selected{% endif %}>
+                                                {{ type_display }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    {# Поле групи ВИДАЛЕНО з форми, оскільки воно тепер прив'язане до LessonTopic #}
+                                    <input type="hidden" name="grade_id" value="{% if grade_for_this_lesson %}{{ grade_for_this_lesson.id }}{% endif %}">
+                                    <button type="submit" class="btn btn-success btn-sm save-button">Зберегти оцінку</button>
+                                </form>
+
+                                <form class="attendance-form mt-2" data-student-id="{{ student.pk }}" data-lesson-id="{{ lesson.id }}">
+                                    {% csrf_token %}
+                                    <label class="d-block">
+                                        <input type="checkbox" name="is_present" class="attendance-checkbox"
+                                               {% if attendance_for_this_lesson and attendance_for_this_lesson.is_present %}checked{% elif not attendance_for_this_lesson %}checked{% endif %}>
+                                        Присутній
+                                    </label>
+                                    <input type="text" name="reason" class="form-control form-control-sm reason-input"
+                                           placeholder="Причина відсутності"
+                                           value="{% if attendance_for_this_lesson and attendance_for_this_lesson.reason %}{{ attendance_for_this_lesson.reason }}{% endif %}"
+                                           {% if attendance_for_this_lesson and attendance_for_this_lesson.is_present %}style="display: none;"{% elif not attendance_for_this_lesson %}style="display: none;"{% endif %}>
+                                    <input type="hidden" name="attendance_id" value="{% if attendance_for_this_lesson %}{{ attendance_for_this_lesson.id }}{% endif %}">
+                                    <button type="submit" class="btn btn-info btn-sm save-button">Зберегти відвідуваність</button>
+                                </form>
+                            </div>
                         </td>
-                        {% endwith %} {# End attendance_for_this_lesson #}
-                        {% endwith %} {# End grades_for_this_lesson #}
-                        {% endwith %} {# End grades_by_lesson_for_student #}
+
+                        {% endwith %}
+                        {% endwith %}
                     {% empty %}
-                        <td colspan="2">Немає даних</td>
+                        <td>Немає даних</td>
                     {% endfor %}
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="{{ lessons|length|add:1|mul:2 }}">У цьому класі немає учнів.</td>
+                    <td colspan="{{ lessons|length|add:1 }}">У цьому класі немає учнів.</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -116,156 +111,12 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    $(document).ready(function() {
-        // Обробка фокуса на полях для відображення прихованих елементів
-        $('.grade-input, .attendance-checkbox, .attendance-form input[name="reason"]').on('focus', function() {
-            $(this).closest('td').find('.hidden-form-elements').show();
-        });
 
-        // Обробка втрати фокуса (blur)
-        $(document).on('blur', '.grade-input, .attendance-checkbox, .attendance-form input[name="reason"], .grade-type-select, .group-select', function() {
-            var $td = $(this).closest('td');
-            // Перевіряємо, чи немає фокуса на будь-якому елементі всередині цієї комірки
-            if (!$td.find(':focus').length) {
-                // Якщо втратили фокус і кнопка збереження не була натиснута
-                // Можливо, тут потрібно додати затримку або іншу логіку, щоб уникнути приховування, якщо користувач переходить між полями.
-                // Для простоти поки приховуємо.
-                $td.find('.hidden-form-elements').hide();
-            }
-        });
+{{ grades_by_student_lesson|json_script:"grades_data" }}
+{{ attendance_by_student_lesson|json_script:"attendance_data" }}
+{{ lesson_topics_data|json_script:"lesson_topics_data" }}
+{{ grade_types_choices|json_script:"grade_types_choices_data" }}
+{{ group_choices|json_script:"group_choices_data" }}
 
-        // Обробка зміни чекбоксу відвідуваності
-        $('.attendance-checkbox').change(function() {
-            var $form = $(this).closest('.attendance-form');
-            if (!$(this).is(':checked')) {
-                // Якщо відсутній, показати поле для причини
-                $form.find('input[name="reason"]').show();
-            } else {
-                // Якщо присутній, приховати поле для причини
-                $form.find('input[name="reason"]').hide();
-                $form.find('input[name="reason"]').val(''); // Очистити поле
-            }
-        }).trigger('change'); // Запустити при завантаженні сторінки для початкового стану
-
-
-        // Обробка відправки форми оцінки (AJAX)
-        $('.grade-form').submit(function(e) {
-            e.preventDefault(); // Запобігти стандартній відправці форми
-            var $form = $(this);
-            var studentId = $form.data('student-id');
-            var lessonId = $form.data('lesson-id');
-            var gradeId = $form.find('input[name="grade_id"]').val(); // ID існуючої оцінки
-            var gradeValue = $form.find('input[name="grade_value"]').val();
-            var gradeType = $form.find('select[name="grade_type"]').val();
-            var gradeGroup = $form.find('select[name="grade_group"]').val();
-            var csrfToken = $form.find('input[name="csrfmiddlewaretoken"]').val();
-
-            // Перевірка на пусте значення оцінки
-            if (!gradeValue && gradeId) { // Якщо оцінку видаляють
-                if (!confirm("Ви впевнені, що хочете видалити цю оцінку?")) {
-                    return;
-                }
-            } else if (!gradeValue) { // Якщо пусте значення при створенні нової
-                alert("Будь ласка, введіть оцінку.");
-                return;
-            } else if (gradeValue < 1 || gradeValue > 12) {
-                alert("Оцінка має бути від 1 до 12.");
-                return;
-            }
-
-            // Налаштування даних для відправки
-            var requestData = {
-                'student_id': studentId,
-                'lesson_id': lessonId,
-                'grade_value': gradeValue,
-                'grade_type': gradeType,
-                'group': gradeGroup || null, // Якщо група пуста, надсилаємо null
-                'csrfmiddlewaretoken': csrfToken
-            };
-
-            var url = '/teacher/update-grade/'; // URL для оновлення/створення оцінки
-            var method = 'POST';
-
-            if (gradeId) {
-                requestData['grade_id'] = gradeId;
-            }
-
-            $.ajax({
-                url: url,
-                type: method,
-                data: requestData,
-                success: function(response) {
-                    if (response.status === 'success') {
-                        // Оновлюємо grade_id у прихованому полі, якщо це була нова оцінка
-                        if (response.grade_id) {
-                            $form.find('input[name="grade_id"]').val(response.grade_id);
-                        }
-                        // Оновлюємо відображуване значення, якщо оцінка була видалена
-                        if (!gradeValue && response.grade_id === null) {
-                             $form.find('input[name="grade_value"]').val('');
-                             $form.find('input[name="grade_id"]').val('');
-                             $form.find('select[name="grade_type"]').val('current');
-                             $form.find('select[name="grade_group"]').val('');
-                        }
-                        alert('Оцінку успішно збережено!');
-                    } else {
-                        alert('Помилка: ' + response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX Error:", status, error);
-                    alert('Помилка при збереженні оцінки. ' + xhr.responseText);
-                }
-            });
-        });
-
-        // Обробка відправки форми відвідуваності (AJAX)
-        $('.attendance-form').submit(function(e) {
-            e.preventDefault();
-            var $form = $(this);
-            var studentId = $form.data('student-id');
-            var lessonId = $form.data('lesson-id');
-            var attendanceId = $form.find('input[name="attendance_id"]').val();
-            var isPresent = $form.find('input[name="is_present"]').is(':checked');
-            var reason = $form.find('input[name="reason"]').val();
-            var csrfToken = $form.find('input[name="csrfmiddlewaretoken"]').val();
-
-            var requestData = {
-                'student_id': studentId,
-                'lesson_id': lessonId,
-                'is_present': isPresent,
-                'reason': reason,
-                'csrfmiddlewaretoken': csrfToken
-            };
-
-            var url = '/teacher/update-attendance/';
-            var method = 'POST';
-
-            if (attendanceId) {
-                requestData['attendance_id'] = attendanceId;
-            }
-
-            $.ajax({
-                url: url,
-                type: method,
-                data: requestData,
-                success: function(response) {
-                    if (response.status === 'success') {
-                        if (response.attendance_id) {
-                            $form.find('input[name="attendance_id"]').val(response.attendance_id);
-                        }
-                        alert('Відвідуваність успішно збережено!');
-                    } else {
-                        alert('Помилка: ' + response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("AJAX Error:", status, error);
-                    alert('Помилка при збереженні відвідуваності. ' + xhr.responseText);
-                }
-            });
-        });
-    });
-</script>
+<script src="{% static 'frontend/js/journal.js' %}"></script>
 {% endblock %}

@@ -15,30 +15,11 @@ class Subject(models.Model):
         return self.name
 
 
-# class SchoolClass(models.Model):
-#     name = models.CharField(max_length=10, unique=True, verbose_name="Назва класу")
-#     year = models.IntegerField(verbose_name="Навчальний рік")
-#     curator = models.OneToOneField(
-#         'Teacher',  # Звернення до моделі Teacher
-#         on_delete=models.SET_NULL,
-#         null=True, blank=True,
-#         related_name="curator",
-#         verbose_name="Класний керівник цього класу"
-#     )
-#
-#     class Meta:
-#         verbose_name = "Клас"
-#         verbose_name_plural = "Класи"
-#         unique_together = ('name', 'year') # 10-А 2025 != 10-А 2026
-#
-#     def __str__(self):
-#         return f"{self.name} ({self.year})"
 class SchoolClass(models.Model):
     # 'A', 'Б', 'В' - це letter_designation
     DoesNotExist = None
     letter_designation = models.CharField(max_length=1, verbose_name="Літерна позначка класу", default='A')
     # Рік, коли цей клас ПІШОВ В ПЕРШИЙ КЛАС.
-    # Наприклад, якщо клас "А" почав навчання у 2016 році (як 1-А), то start_year = 2016.
     start_year = models.IntegerField(verbose_name="Рік початку навчання (1-й клас)", default=2010)
     # Статус класу: активний, випускний, закритий
     STATUS_CHOICES = (
@@ -76,7 +57,7 @@ class SchoolClass(models.Model):
         на основі року початку навчання та поточного навчального року.
         """
         if self.status == 'graduated':
-            return 11  # Або будь-яке інше значення, яке ви вважаєте за потрібне для випускного класу
+            return 11  # Або будь-яке інше значення, яке вважається для випускного класу
 
         current_academic_year_start = self.get_current_academic_year_start()
 
@@ -87,13 +68,6 @@ class SchoolClass(models.Model):
 
         # Різниця між поточним навчальним роком і роком початку навчання
         grade_number = current_academic_year_start - self.start_year + 1
-
-        # Якщо клас створений зразу як 8-й, а не 1-й
-        # (Наприклад, start_year = 2024, а зараз 2025. Різниця 1 рік, але це вже 9-й клас)
-        # Цю логіку потрібно буде додати окремо, якщо ви допускаєте створення класу не з 1-го року.
-        # Найкраще для цього:
-        # Додати поле initial_grade_number = models.IntegerField(default=1) до SchoolClass
-        # Тоді current_grade_number = (current_academic_year_start - self.start_year) + self.initial_grade_number
 
         return grade_number
 
@@ -145,11 +119,6 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name="Користувач")
     subjects = models.ManyToManyField(Subject, related_name="teachers", verbose_name="Викладає предмети")
     classes = models.ManyToManyField(SchoolClass, related_name="teachers", verbose_name="Викладає в класах") # Додано для зручності
-    # teaching_classes = models.ManyToManyField(
-    #     'SchoolClass',  # Звернення до моделі SchoolClass
-    #     related_name="teachers_teaching",
-    #     verbose_name="Викладає в класах"
-    # )
 
     class Meta:
         verbose_name = "Вчитель"

@@ -1,57 +1,135 @@
+/* Journal Table Styles */
+.table-journal {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse; /* Ensure cells share borders cleanly */
+}
+
 .table-journal thead th {
     text-align: center;
     vertical-align: middle;
     padding: 5px;
     position: relative;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
 }
+
 .table-journal tbody td {
     text-align: center;
     vertical-align: middle;
     padding: 3px;
+    border: 1px solid #dee2e6;
+    cursor: pointer; /* Indicate interactivity */
+    position: relative; /* For absolute positioning of edit-mode */
 }
+
+/* Rotated Date Headers */
 .rotate-text {
     white-space: nowrap;
     position: absolute;
-    left: 50%;
-    top: 100;
+    left: 35%;
+    top: 10;
     transform: translateX(-50%) rotate(-90deg);
     transform-origin: top center;
-    height: 100px; /* Adjust as needed */
-    width: 20px; /* Adjust as needed */
+    height: 120px; /* Adjusted height for content */
+    width: 30px; /* Fixed width for rotated text */
     line-height: 20px;
     font-size: 0.8em;
+    padding-top: 5px; /* Add some padding if needed */
 }
+
 .date-header-cell {
-    min-width: 30px; /* Adjust width for rotated text */
-    height: 120px; /* Ensure enough height for rotated text */
+    min-width: 50px; /* Minimum width to accommodate rotated text */
+    height: 130px; /* Sufficient height for rotated text to fit */
     padding: 0;
     position: relative;
     overflow: hidden;
 }
-.grade-input, .attendance-checkbox {
-    width: 100%;
-    text-align: center;
-    border: 1px solid #ccc;
-    padding: 2px;
-    box-sizing: border-box;
-}
-.grade-input {
-    max-width: 40px;
-}
-.grade-cell {
-    position: relative;
-}
-.grade-type-select, .group-select {
-    font-size: 0.7em;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    text-align: center;
-}
-.hidden-form-elements {
-    display: none; /* Hide hidden inputs in cell */
-}
-.save-button {
+
+/* Cell Display Modes */
+.journal-cell .display-mode {
     display: block;
+    width: 100%;
+    height: 100%; /* Take full height of cell */
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Vertically center */
+    justify-content: center; /* Horizontally center */
+    flex-direction: column; /* Stack content vertically */
+    font-size: 0.9em;
+}
+
+.journal-cell .placeholder {
+    color: #888;
+}
+
+.journal-cell .grade-value {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.journal-cell .attendance-status {
+    font-weight: bold;
+    color: #dc3545;
+}
+
+.journal-cell .attendance-reason {
+    font-size: 0.7em;
+    color: #6c757d;
+}
+
+/* Cell Edit Modes */
+.journal-cell .edit-mode {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    padding: 5px;
+    box-sizing: border-box;
+    z-index: 10; /* Ensure it's above other cells */
+    border: 2px solid #007bff; /* Highlight active cell */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.journal-cell .edit-mode form {
+    margin-bottom: 5px;
+}
+
+.journal-cell .edit-mode .form-control-sm {
+    height: calc(1.5em + .5rem + 2px); /* Override default Bootstrap height for sm */
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+}
+
+.journal-cell .grade-input {
+    width: 100%; /* Full width within its form */
+    max-width: none; /* Override previous max-width */
+    text-align: center;
+}
+
+.journal-cell .grade-type-select,
+.journal-cell .group-select,
+.journal-cell .reason-input {
+    width: 100%;
     margin-top: 5px;
+    font-size: 0.8em;
+}
+
+.journal-cell .save-button {
+    width: 100%;
+    margin-top: 5px;
+    font-size: 0.7em;
+    padding: 2px 5px;
+}
+
+/* Utility Class */
+.hidden {
+    display: none !important;
 }

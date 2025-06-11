@@ -25,35 +25,41 @@ class Grade(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="grades", verbose_name="Урок")
     value = models.PositiveSmallIntegerField(choices=[(i, str(i)) for i in range(1, 13)], verbose_name="Оцінка")
 
-    GRADE_TYPE_CHOICES = (
+    CURRENT_GRADE_TYPES = (
         ('current', 'Поточна'),
-        ('test', 'За тест'),
+        ('test_questions', 'За тест'),
         ('self_study', 'За самостійну'),
+        ('test', 'За контрольну'),
+    )
+    FINAL_GRADE_TYPES = (
         ('thematic', 'Тематична'),
         ('semester_1', 'За І семестр'),
         ('semester_2', 'За ІІ семестр'),
         ('annual', 'Річна'),
     )
-    grade_type = models.CharField(max_length=20, choices=GRADE_TYPE_CHOICES, default='current', verbose_name="Тип оцінки")
-
-    GROUP_CHOICES = (
-        (1, 'Група 1'),
-        (2, 'Група 2'),
-        (3, 'Група 3'),
-        (4, 'Група 4'),
-    )
-    group = models.PositiveSmallIntegerField(choices=GROUP_CHOICES, null=True, blank=True, verbose_name="Група оцінювання") # для диференційованого навчання
+    GRADE_TYPE_CHOICES = CURRENT_GRADE_TYPES + FINAL_GRADE_TYPES
+    grade_type = models.CharField(max_length=20, choices=GRADE_TYPE_CHOICES, default='current',
+                                  verbose_name="Тип оцінки")
 
     comment = models.TextField(blank=True, verbose_name="Коментар")
 
     class Meta:
         verbose_name = "Оцінка"
         verbose_name_plural = "Оцінки"
-        unique_together = ('student', 'lesson', 'grade_type') # Учень може мати лише одну оцінку певного типу за урок
+        unique_together = ('student', 'lesson')
         ordering = ['lesson__date', 'student__user__last_name']
 
     def __str__(self):
-        return f"{self.student.user.get_full_name()}: {self.value} ({self.grade_type}) за {self.lesson.lesson_topic.topic} ({self.lesson.date})"
+        return f"{self.student.user.get_full_name()}: " \
+               f"{self.value} ({self.grade_type}) за {self.lesson.lesson_topic.topic} ({self.lesson.date})"
+
+    @property
+    def is_current_grade(self):
+        return self.grade_type in ['current', 'test_questions', 'test', 'self_study']
+
+    @property
+    def is_final_grade(self):
+        return self.grade_type in ['thematic', 'semester_1', 'semester_2', 'annual']
 
 
 class Attendance(models.Model):

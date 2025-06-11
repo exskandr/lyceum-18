@@ -5,7 +5,7 @@ from .models import CurriculumPlan, LessonTopic
 class LessonTopicInline(admin.TabularInline):
     model = LessonTopic
     extra = 0
-    fields = ('lesson_number', 'topic', 'homework', 'lesson_type',)
+    fields = ('lesson_number', 'topic', 'group', 'homework', 'lesson_type',)
 
 
 @admin.register(CurriculumPlan)
@@ -25,10 +25,10 @@ class CurriculumPlanAdmin(admin.ModelAdmin):
 
 @admin.register(LessonTopic)
 class LessonTopicAdmin(admin.ModelAdmin):
-    list_display = ('lesson_number', 'topic', 'plan', 'lesson_type', 'homework')
+    list_display = ('lesson_number', 'topic', 'group', 'plan', 'lesson_type', 'homework')
     list_filter = ('lesson_type', 'plan__subject', 'plan__school_class')
-    search_fields = ('topic', 'homework', 'plan__subject__name')
-    raw_id_fields = ('plan',) # Використовувати ID замість випадаючого списку для плану
+    search_fields = ('topic', 'group', 'homework', 'plan__subject__name')
+    raw_id_fields = ('plan',)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

@@ -32,7 +32,21 @@ class LessonTopic(models.Model):
         ('control', 'Контрольна робота'),
         ('other', 'Інше'),
     )
-    lesson_type = models.CharField(max_length=20, choices=LESSON_TYPE_CHOICES, default='lecture', verbose_name="Тип уроку")
+    lesson_type = models.CharField(max_length=20,
+                                   choices=LESSON_TYPE_CHOICES,
+                                   default='lecture',
+                                   verbose_name="Тип уроку")
+    GROUP_CHOICES = (
+            (None, 'Немає групи'), # Додаємо варіант None для відсутності групи
+            (1, 'Група 1'),
+            (2, 'Група 2'),
+            (3, 'Група 3'),
+            (4, 'Група 4'),
+        )
+    group = models.IntegerField(choices=GROUP_CHOICES,
+                                null=True,
+                                blank=True,
+                                verbose_name="Група оцінювання")
 
     class Meta:
         verbose_name = "Тема уроку"
@@ -41,4 +55,6 @@ class LessonTopic(models.Model):
         ordering = ['lesson_number']
 
     def __str__(self):
-        return f"Урок {self.lesson_number}: {self.topic} ({self.plan.subject.name} - {self.plan.school_class.full_name()})"
+        group_display = f" (гр. оц. {self.group})" if self.group is not None else ""
+        return f"Урок {self.lesson_number} {group_display}: " \
+               f"{self.topic}  ({self.plan.subject.name} - {self.plan.school_class.full_name()})"

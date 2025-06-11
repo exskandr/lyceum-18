@@ -5,7 +5,7 @@ from .models import Lesson, Grade, Attendance
 class GradeInline(admin.TabularInline):
     model = Grade
     extra = 0
-    fields = ('student', 'value', 'grade_type', 'group', 'comment')
+    fields = ('student', 'value', 'grade_type', 'comment')
     raw_id_fields = ('student',) # Краще для великої кількості учнів
 
 
@@ -38,10 +38,10 @@ class LessonAdmin(admin.ModelAdmin):
 
 @admin.register(Grade)
 class GradeAdmin(admin.ModelAdmin):
-    list_display = ('student', 'lesson', 'value', 'grade_type', 'group', 'comment')
-    list_filter = ('grade_type', 'group', 'lesson__subject', 'lesson__school_class', 'student__school_class')
+    list_display = ('student', 'lesson', 'value', 'grade_type', 'comment')
+    list_filter = ('grade_type', 'lesson__subject', 'lesson__school_class', 'student__school_class')
     search_fields = ('student__user__first_name', 'student__user__last_name', 'lesson__lesson_topic__topic')
-    raw_id_fields = ('student', 'lesson') # Краще для вибору об'єктів
+    raw_id_fields = ('student', 'lesson')  # Краще для вибору об'єктів
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
