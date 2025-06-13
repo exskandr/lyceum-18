@@ -1,0 +1,103 @@
+{# templates/frontend/teacher/planning_detail.html #}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Деталі плану: {{ school_class.full_name }} - {{ subject.name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'frontend/css/planning.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Деталі календарного плану: {{ school_class.full_name }} - {{ subject.name }} ({{ curriculum_plan.academic_year }} навч. рік)</h1>
+
+<p>Навчальний рік: {{ curriculum_plan.academic_year_start|date:"d.m.Y" }} - {{ curriculum_plan.academic_year_end|date:"d.m.Y" }}</p>
+{% if curriculum_plan.semester_1_start and curriculum_plan.semester_1_end %}
+    <p>І семестр: {{ curriculum_plan.semester_1_start|date:"d.m.Y" }} - {{ curriculum_plan.semester_1_end|date:"d.m.Y" }}</p>
+{% endif %}
+{% if curriculum_plan.semester_2_start and curriculum_plan.semester_2_end %}
+    <p>ІІ семестр: {{ curriculum_plan.semester_2_start|date:"d.m.Y" }} - {{ curriculum_plan.semester_2_end|date:"d.m.Y" }}</p>
+{% endif %}
+{% if curriculum_plan.vacation_periods_json %}
+    <p>Канікули:
+        {% for period in curriculum_plan.vacation_periods_json %}
+            {{ period.start }} - {{ period.end }}{% if not forloop.last %}; {% endif %}
+        {% endfor %}
+    </p>
+{% endif %}
+
+<a href="{% url 'teacher_planning_settings_view' class_id=school_class.id subject_id=subject.id %}" class="btn btn-secondary mb-4">Налаштувати план / Перегенерувати</a>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-sm" id="detailed-lessons-table">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Дата проведення</th> {# Тут буде фактична дата з Lesson #}
+                <th>Тема уроку</th>
+                <th>Тип уроку</th>
+                <th>Група</th>
+                <th>Д/З та Примітки</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lesson_topic in planned_lessons %}
+            <tr>
+                <td>{{ lesson_topic.lesson_number }}</td>
+                {# Тут нам потрібна дата з моделі Lesson. Поки що будемо припускати, що JS її заповнить #}
+                {# Або ви можете попередньо завантажити Lesson об'єкти у view і передати їх #}
+                <td data-lesson-number="{{ lesson_topic.lesson_number }}" class="lesson-date-cell">
+                    {% comment %} Припустимо, що дата буде завантажена JS або отримана з Lesson model {% endcomment %}
+                    -
+                </td>
+                <td>
+                    <input type="hidden" class="lesson-topic-id" value="{{ lesson_topic.id }}">
+                    <input type="text" class="form-control form-control-sm lesson-topic-text" value="{{ lesson_topic.topic }}">
+                </td>
+                <td>
+                    <select class="form-control form-control-sm lesson-type-select">
+                        {% for type_val, type_display in lesson_type_choices %}
+                            <option value="{{ type_val }}" {% if lesson_topic.lesson_type == type_val %}selected{% endif %}>{{ type_display }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control form-control-sm lesson-group-select">
+                        {% for group_val, group_display in group_choices %}
+                            <option value="{{ group_val|default:'' }}" {% if lesson_topic.group == group_val %}selected{% endif %}>{{ group_display }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <textarea class="form-control form-control-sm lesson-homework" rows="2">{{ lesson_topic.homework }}</textarea>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary save-lesson-topic-row">Зберегти</button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7" class="text-center">Календарний план ще не згенеровано.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<button type="button" id="save-all-detailed-lessons-btn" class="btn btn-success mt-3" style="display: none;">Зберегти всі зміни</button>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+{{ lesson_type_choices|json_script:"lesson_type_choices_data" }}
+{{ group_choices|json_script:"group_choices_data" }}
+
+{# Передаємо існуючі Lesson об'єкти, щоб отримати їх дати #}
+{% comment %}<script id="existing_lessons_data" type="application/json">{% endcomment %}
+    {% comment %} Цей блок має бути заповнений у views.py даними про Lesson об'єкти, які відповідають цьому плану {% endcomment %}
+    {% comment %} Наприклад: {{ existing_lessons_for_plan|json_script }} {% endcomment %}
+    {{ lesson_dates_by_topic_number|json_script:"lesson_dates_by_topic_number" }}
+{% comment %}</script>{% endcomment %}
+
+<script src="{% static 'frontend/js/planning_detail.js' %}"></script>
+{% endblock %}

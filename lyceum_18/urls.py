@@ -28,8 +28,8 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'), # Домашня сторінка ліцею
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    # path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
-    path('teacher/', include('frontend.urls')), # Включаємо URL-и додатку frontend
+    path('', include('frontend.urls')),
+    # path('teacher/', include('frontend.urls')), # Включаємо URL-и додатку frontend
     # path('student/', include('frontend.urls')), # Додасте пізніше
     # path('parent/', include('frontend.urls')), # Додасте пізніше
     path('news/', include('presentation.urls', namespace='news_detail')),

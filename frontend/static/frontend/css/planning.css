@@ -1,0 +1,162 @@
+/* frontend/static/frontend/css/planning.css */
+
+/* Загальні стилі для сторінок планування */
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+h1, h2 {
+    color: #0056b3;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    padding: 8px 12px;
+}
+
+.btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    border: 1px solid #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+    border: 1px solid #17a2b8;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: 1px solid #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Стилі для таблиць */
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.table-sm th,
+.table-sm td {
+    padding: 0.3rem; /* Менший відступ для компактних таблиць */
+}
+
+/* Стилі для чекбоксів днів тижня */
+.form-check-inline {
+    margin-right: 1.5rem;
+}
+
+/* Стилі для textarea канікул */
+#vacation_periods {
+    resize: vertical; /* Дозволити вертикальне змінення розміру */
+}
+
+/* Стилі для кнопок дій у таблиці деталей плану */
+.table .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+/* Якщо потрібно приховати елемент */
+.d-none {
+    display: none !important;
+}
+
+/* Загальні відступи для елементів */
+.mb-4 { margin-bottom: 1.5rem !important; }
+.mt-3 { margin-top: 1rem !important; }
+.ml-2 { margin-left: 0.5rem !important; }
+
+/* Стилі для комірок таблиці, що містять поля форми */
+.table input.form-control-sm,
+.table select.form-control-sm,
+.table textarea.form-control-sm {
+    width: 100%;
+    /* remove default border to make it seem like part of the table */
+    border: 1px solid transparent;
+    padding: 0.3rem 0.5rem;
+    box-shadow: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.table input.form-control-sm:focus,
+.table select.form-control-sm:focus,
+.table textarea.form-control-sm:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.table textarea.form-control-sm {
+    min-height: 50px; /* Мінімальна висота для textarea */
+}
+
+/* Для обертового тексту заголовків дати в журналі (якщо ви використовуєте) */
+.date-header-cell .rotate-text {
+    transform: rotate(270deg);
+    white-space: nowrap;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: 0% 0%;
+    margin-left: -10px; /* Регулюйте для центрування */
+    margin-top: 10px; /* Регулюйте для центрування */
+}

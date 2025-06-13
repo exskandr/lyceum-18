@@ -1,5 +1,6 @@
 {# templates/frontend/teacher/dashboard.html #}
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Панель Вчителя{% endblock %}
 
@@ -49,7 +50,83 @@
                 </ul>
             </div>
         </div>
+        ////
+        <div class="card mb-4">
+    <div class="card-header">
+        <h5>Мої предмети та класи</h5>
     </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Клас</th>
+                        <th>Предмет</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for class_obj in teaching_classes %}
+                        {% for subject_obj in teaching_subjects %}
+                        <tr>
+                            <td>{{ class_obj.full_name }}</td>
+                            <td>{{ subject_obj.name }}</td>
+                            <td>
+                                <a href="{% url 'teacher_planning_settings_view' class_id=class_obj.id subject_id=subject_obj.id %}" class="btn btn-sm btn-primary">
+                                    Планування
+                                </a>
+                                <a href="{% url 'teacher_journal' class_id=class_obj.id subject_id=subject_obj.id %}" class="btn btn-sm btn-info">
+                                    Журнал
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+
+        <div class="card mb-4">
+    <div class="card-header">
+        <h5>Мої предмети та класи JS</h5>
+    </div>
+        <div class="card-body">
+        <div class="form-group">
+            <label for="selectClass">Виберіть клас:</label>
+            <select class="form-control" id="selectClass">
+                <option value="">-- Оберіть клас --</option>
+                {% for class_obj in teaching_classes %}
+                    <option value="{{ class_obj.id }}">{{ class_obj.full_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="selectSubject">Виберіть предмет:</label>
+            <select class="form-control" id="selectSubject">
+                <option value="">-- Оберіть предмет --</option>
+                {% for subject_obj in teaching_subjects %}
+                    <option value="{{ subject_obj.id }}">{{ subject_obj.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button id="goToPlanningBtn" class="btn btn-primary mt-3"
+        data-planning-url="{% url 'teacher_planning_settings_view' class_id=0 subject_id=0 %}">
+    Перейти до планування
+</button>
+<button id="goToJournalBtn" class="btn btn-info mt-3 ml-2"
+        data-journal-url="{% url 'teacher_journal' class_id=0 subject_id=0 %}">
+    Перейти до журналу
+</button>
+      </div>
+      </div>
+
+  </div>
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'frontend/js/planning_select_class_subject.js' %}"></script>
 {% endblock %}

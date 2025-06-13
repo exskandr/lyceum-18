@@ -1,6 +1,6 @@
 from django.db import models
 from core.models import SchoolClass, Subject, Student, Teacher
-from planning.models import LessonTopic
+from planning.models import LessonTopic, CurriculumUnit
 
 
 class Lesson(models.Model):
@@ -40,6 +40,10 @@ class Grade(models.Model):
     GRADE_TYPE_CHOICES = CURRENT_GRADE_TYPES + FINAL_GRADE_TYPES
     grade_type = models.CharField(max_length=20, choices=GRADE_TYPE_CHOICES, default='current',
                                   verbose_name="Тип оцінки")
+
+    curriculum_unit = models.ForeignKey(CurriculumUnit, on_delete=models.CASCADE, null=True, blank=True,
+                                        related_name="unit_grades",
+                                        verbose_name="Навчальна тема (для тематичних оцінок)")
 
     comment = models.TextField(blank=True, verbose_name="Коментар")
 
