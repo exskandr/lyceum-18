@@ -1,5 +1,9 @@
+from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class User(AbstractUser):
@@ -34,3 +38,81 @@ class User(AbstractUser):
 
     def is_parent(self):
         return self.role == 'parent'
+
+    @property
+    def get_full_name_display(self):
+        """
+        Повертає повне ім'я користувача (Прізвище Ім'я По батькові).
+        """
+        patronymic = getattr(self.profile, 'patronymic', '') if hasattr(self, 'profile') else ''
+        return f"{self.last_name or ''} {self.first_name or ''} {patronymic or ''}".strip()
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="Користувач",
+        related_name="profile"
+    )
+    photo = models.ImageField(
+        upload_to='users_photos/',
+        blank=True,
+        null=True,
+        verbose_name="Фото профілю"
+    )
+    patronymic = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="По батькові"
+    )
+    year_of_birth = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Рік народження"
+    )
+    description = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="Додатковий опис"
+    )
+
+    # Поля, специфічні для учнів
+    admission_year = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Рік вступу до навчального закладу"
+    )
+
+    # Поля, специфічні для вчителів / класних керівників
+    start_work_year = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Рік початку роботи"
+    )
+    position = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="Посада"
+    )
+    achievements = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="Досягнення"
+    )
+
+    class Meta:
+        verbose_name = "Профіль користувача"
+        verbose_name_plural = "Профілі користувачів"
+
+    def __str__(self):
+        return f"Профіль {self.user.username}"
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
