@@ -4,7 +4,7 @@
 {% block title %}Мій Профіль{% endblock %}
 
 {% block content %}
-<section id="profile" class="padding-medium position-relative" style = "background-color: rgba(200, 200, 200, 0.3)">
+<section id="profile" class="padding-medium position-relative" style = "background-color: rgba(200, 200, 200, 0.8)">
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -52,6 +52,7 @@
                                 <hr>
                                 <h5>Інформація для вчителів / класних керівників</h5>
                                 <p><strong>Рік початку роботи:</strong> {{ profile.start_work_year|default:"Не вказано" }}</p>
+                                <p><strong>Стаж роботи:</strong> {{ work_experience|default:"Не вказано" }}</p>
                                 <p><strong>Посада:</strong> {{ profile.position|default:"Не вказано" }}</p>
                                 <p><strong>Досягнення:</strong> {{ profile.achievements|default:"Не вказано" }}</p>
                             {% endif %}
