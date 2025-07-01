@@ -1,5 +1,11 @@
+{% extends 'presentation/base_presentation.html' %}
+{% load static %}
 {% load news_tags %}
 
+{% block title %}{{ news.title }} {% endblock %}
+{% block content %}
+
+<section id="blogs" class="padding-medium position-relative" style = "background-color: rgba(200, 200, 200, 0.5);">
 <h1>{{ news.title }}</h1>
 <p><img src="{{ news.main_image.url }}" alt="{{ news.title }}" style="width:300px;"></p>
 <p><strong>Автор:</strong> {{ news.author }}</p>
@@ -25,7 +31,10 @@
         {% endfor %}
     </ul>
 {% endif %}
+    <img class="position-absolute bottom-0 start-0 z-n1 img-fluid" src="{% static 'presentation/img/pattern4.png' %}" alt="img">
+</section>
 
+<div>
 <h2>Similar News</h2>
 {% for item in similar_news %}
     <p>
@@ -34,3 +43,6 @@
 {% empty %}
     There are no similar news yet.
 {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,27 +1,62 @@
+{% extends 'presentation/base_presentation.html' %}
+{% load static %}
 {% load news_tags %}
 
-<h1>Новини</h1>
+{% block title %}NEWS Lyceum 18 {% endblock %}
+
+{% block content %}
+<section id="blogs" class="padding-medium position-relative" style = "background-color: rgba(200, 200, 200, 0.3)">
+<div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <div class="section-title">
+          <h2 class="display-5 text-center fw-semibold">NEWS</h2>
+        </div>
 {% if tag %}
-<h2>Posts tagged with "{{ tag.name }}"</h2>
+<div class="section-title">
+      <p class="display-12 text-right fw-semibold">Posts tagged with "{{ tag.name }}"</p>
+</div>
 {% endif %}
-<ul>
+<div class="post-grid row mt-5">
     {% for item in news %}
-    <li>
-        <a href="{{ item.get_absolute_url }}">
-            <img src="{{ item.main_image.url }}" alt="{{ item.title }}" style="width:150px;">
-            <h2>{{ item.title }}</h2>
-        </a>
-        <p class="tags">Tags:
+
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-5">
+      <div class="card-item">
+        <div class="card border-0 bg-transparent">
+          <div class="card-image position-relative">
+            <a href="{{ item.get_absolute_url }}">
+              <img src="{{ item.main_image.url }}" alt="{{ item.title }}" class="post-image img-fluid">
+              <h2 class="mt-2"> {{ item.title }} </h2>
+            </a>
+          </div>
+        <div class="card-body p-0 mt-2">
+        <span class="text-capitalize text-black-50">Tags:
             {% for tag in item.tags.all %}
-                <a href="{% url "news:news_list_by_tag" tag.slug %}">
+                <a href="{% url 'news:news_list_by_tag' tag.slug %}">
                 {{ tag.name }}
                 </a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
-            </p>
+
         <p>Автор: {{ item.author }} | Дата: {{ item.publish }}</p>
-    </li>
-    {% endfor %}
-</ul>
-<h3>Latest news</h3>
-{% show_latest_news 2 %}
+        </span>
+        </div>
+        </div>
+      </div>
+    </div>
+
+
+{% endfor %}
+   </div>
+</div>
+</div>
+
+
+
+
+      <img class="position-absolute bottom-0 start-0 z-n1 img-fluid" src="{% static 'presentation/img/pattern4.png' %}" alt="img">
+      </section>
+
+
+
 {% include "pagination.html" with page=news %}
+
+{% endblock %}

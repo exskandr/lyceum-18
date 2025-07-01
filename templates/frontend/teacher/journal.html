@@ -1,5 +1,5 @@
 {# templates/frontend/teacher/journal.html #}
-{% extends 'base.html' %}
+{% extends 'presentation/base_presentation.html' %}
 {% load app_filters %}
 {% load static %}
 
@@ -10,6 +10,8 @@
 {% endblock %}
 
 {% block content %}
+<section class="position-relative padding-medium">
+    <div>
 <h1 class="mb-4">Журнал: {{ school_class.full_name }} - {{ subject.name }}</h1>
 
 <p>Період: з {{ start_date|date:"d.m.Y" }} по {{ end_date|date:"d.m.Y" }}</p>
@@ -28,7 +30,6 @@
                             <br>
                             {# lesson.get_lesson_topic_display БУЛО ВИДАЛЕНО, використовуємо topic напряму або адаптуємо #}
 <!--                            <small>{{ lesson.lesson_topic.topic }}</small>-->
-<!--                            <br>-->
                             {% if lesson.lesson_topic.group %} {# Показуємо групу, якщо вона є #}
                                 <small>Гр. {{ lesson.lesson_topic.group }}</small>
                                 <br>
@@ -107,6 +108,9 @@
         </tbody>
     </table>
 </div>
+    </div>
+</section>
+
 
 {% endblock %}
 

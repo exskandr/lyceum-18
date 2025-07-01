@@ -15,6 +15,13 @@ class DynamicPageView(DetailView):
         return get_object_or_404(DynamicPage, slug=self.kwargs['slug'])
 
 
+def index(request):
+    """
+    Відображає головну сторінку візитної картки ліцею.
+    """
+    return render(request, 'presentation/index.html')
+
+
 def home(request):
     sub_items = NavbarSubItem.objects.all().order_by('order')
     navbar = {}

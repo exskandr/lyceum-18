@@ -1,11 +1,13 @@
 {# templates/login.html #}
-{% extends 'base.html' %}
+{% extends 'presentation/base_presentation.html' %}
 
 {% block title %}Вхід{% endblock %}
 
 {% block content %}
+
+<section class="padding-medium position-relative" style = "background-color: rgba(200, 200, 200, 0.3)" >
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="card">
             <div class="card-header">Вхід до системи</div>
             <div class="card-body">
@@ -18,4 +20,5 @@
         </div>
     </div>
 </div>
+    </section>
 {% endblock %}

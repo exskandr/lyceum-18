@@ -1,0 +1,492 @@
+{% extends 'presentation/base_presentation.html' %}
+{% load static %}
+{% load news_tags %}
+
+<!--{% block title %}Ліцей 18 {% endblock %}-->
+
+{% block content %}
+  <section id="slider">
+    <div class="swiper slider position-relative">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide d-flex"
+          style="background-image: url('{% static 'presentation/img/slider-image.jpg' %}'); background-size: cover; background-repeat: no-repeat; height: 90vh; background-position: center; height: 90vh;">
+          <div class="banner-content text-center m-auto">
+            <h2 class="text-white display-1 fw-bolder lh-1">Unlock Your Future Success</h2>
+            <p class="fs-4 text-white text-capitalize">High School Redefined for Success!</p>
+          </div>
+        </div>
+        <div class="swiper-slide d-flex"
+          style="background-image: url('{% static 'presentation/img/slider-image1.jpg' %}'); background-size: cover; background-repeat: no-repeat; height: 90vh; background-position: center; height: 90vh;">
+          <div class="banner-content text-center m-auto">
+            <h2 class="text-white display-1 fw-bolder lh-1">Unlock Your Future Success</h2>
+            <p class="fs-4 text-white text-capitalize">High School Redefined for Success!</p>
+          </div>
+        </div>
+        <div class="swiper-slide d-flex"
+          style="background-image: url('{% static 'presentation/img/slider-image2.jpg' %}'); background-size: cover; background-repeat: no-repeat; height: 90vh; background-position: center; height: 90vh;">
+          <div class="banner-content text-center m-auto">
+            <h2 class="text-white display-1 fw-bolder lh-1">Unlock Your Future Success</h2>
+            <p class="fs-4 text-white text-capitalize">High School Redefined for Success!</p>
+          </div>
+        </div>
+
+      </div>
+       <div class="position-absolute top-0 bottom-0 end-0 m-auto me-0 me-md-5 main-slider-button-next">
+        <svg class="chevron-forward-circle light-color" width="60" height="60">
+          <use xlink:href="#chevron-forward-circle"></use>
+        </svg>
+      </div>
+      <div class="position-absolute top-0 bottom-0 start-0 m-auto ms-0 ms-md-5 main-slider-button-prev">
+        <svg class="chevron-back-circle light-color" width="60" height="60">
+          <use xlink:href="#chevron-back-circle"></use>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="z-1">
+    <div class="container">
+      <h2 class="display-5 d-block d-lg-none text-center fw-semibold">Our Features</h2>
+      <div class="row g-lg-0 mt-5 mt-lg-0">
+        <div class="col-md-4 text-center">
+          <img src="{% static 'presentation/img/feature1.jpg' %}" class="img-fluid" alt="img">
+          <a href="#"><H4 class="text-white py-3 m-0 bg-primary">Active learning</H4>
+          </a>
+        </div>
+        <div class="col-md-4 text-center">
+          <img src="{% static 'presentation/img/feature2.jpg' %}" class="img-fluid" alt="img">
+          <a href="#"><h4 class="text-white py-3 m-0 bg-tertiary">Digital library</h4></a>
+        </div>
+        <div class="col-md-4 text-center">
+          <img src="{% static 'presentation/img/feature3.jpg' %}" class="img-fluid" alt="img">
+          <a href="#"><h4 class="text-white py-3 m-0 bg-secondary">Certified teachers</h4></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="bg-background position-relative">
+    <div class="container">
+      <div class="row align-items-center g-lg-5">
+
+        <div class="col-md-6">
+          <div class="feature d-flex">
+            <div class="me-4">
+              <svg class="" width="100" height="100">
+                <use xlink:href="#circle-tick"></use>
+              </svg>
+            </div>
+            <div>
+              <h6>Featured Programs</h6>
+              <p>
+                Discover our acclaimed programs designed to unlock your child's potential. From advanced academic
+                courses to a rich tapestry of extracurricular activities, School provides a holistic education that goes
+                beyond the classroom.
+              </p>
+            </div>
+
+          </div>
+          <div class="feature d-flex mt-4">
+            <div class="me-4">
+              <svg class="" width="100" height="100">
+                <use xlink:href="#circle-tick"></use>
+              </svg>
+            </div>
+            <div>
+              <h6>Upcoming Events</h6>
+              <p>
+                Stay connected with our vibrant community through upcoming events. Join us for open houses, student
+                showcases, and interactive webinars to get a firsthand look at the dynamic learning experiences School
+                offers.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-md-6 mt-5">
+          <div class="bg-primary p-5">
+            <h4 class="text-white mt-3">Welcome</h4>
+            <p class="text-white my-4">Welcome to our school, where excellence meets innovation. Our commitment to
+              fostering academic achievement, personal growth, and community engagement sets us apart. Explore a
+              transformative educational journey that prepares students for a future of limitless possibilities. From advanced academic
+              courses to a rich tapestry of extracurricular activities, School provides a holistic education that goes
+              beyond the classroom.</p>
+            <a href="#" class="text-white text-uppercase mb-3 fs-6 text-decoration-underline">Read more</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <section id="courses" class="z-1">
+      <div class="container">
+        <h2 class="display-5 text-center fw-semibold">Our Courses</h2>
+
+        <div class="row g-lg-0 mt-4">
+          <div class="col-md-4 text-center">
+            <img src="{% static 'presentation/img/course1.jpg' %}" class="img-fluid" alt="img">
+            <a href="#"><p class="text-white py-3 m-0 bg-primary">Health and Sciences</p></a>
+          </div>
+          <div class="col-md-4 text-center">
+            <img src="{% static 'presentation/img/course2.jpg' %}" class="img-fluid" alt="img">
+            <a href="#"><p class="text-white py-3 m-0 bg-tertiary">Business Academics</p></a>
+          </div>
+          <div class="col-md-4 text-center">
+            <img src="{% static 'presentation/img/course3.jpg' %}" class="img-fluid" alt="img">
+            <a href="#"><p class="text-white py-3 m-0 bg-secondary">World History</p></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+<section id="founder" class="padding-medium position-relative">
+    <div class="container">
+      <div class="row align-items-center">
+
+        <div class="col-md-4 offset-md-2">
+          <div class="imageblock me-4">
+            <a type="button" data-bs-toggle="modal" data-src="https://www.youtube.com/embed/W_tIumKa8VY"
+              data-bs-target="#myModal" class="play-btn position-relative">
+              <img class="img-fluid" src="{% static 'presentation/img/founder.png' %}" alt="img">
+            </a>
+          </div>
+        </div>
+
+        <div class="col-md-4 mt-5">
+
+          <p class="fs-2 lh-base">At our School, we aim to empower students with the skills, knowledge, and values
+            needed for success in a global context.</p>
+          <div class="d-flex justify-content-between">
+            <div class="mt-3">
+              <p class="fw-bold m-0">Josheph Ken</p>
+              <p>Principal</p>
+            </div>
+            <div>
+              <img src="{% static 'presentation/img/signature.png' %}" alt="img" class="img-fluid">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <img class="position-absolute top-50 end-0 translate-middle-y z-n1 img-fluid" src="{% static 'presentation/img/pattern1.png' %}" alt="img">
+  </section>
+
+<section id="teacher" class="position-relative">
+    <div class="container">
+      <h2 class="display-5 text-center fw-semibold">Meet our team of dedicated educators</h2>
+
+      <div class="row g-0 mt-4">
+        <div class="col text-center">
+          <img src="{% static 'presentation/img/teacher5.jpg' %}" class="img-fluid" alt="img">
+          <div class="d-flex justify-content-between p-3 bg-primary">
+            <p class="m-0 text-white">Andy R.K</p>
+            <p class="m-0 fw-lighter text-white">Director</p>
+          </div>
+        </div>
+        <div class="col text-center">
+          <img src="{% static 'presentation/img/teacher4.jpg' %}" class="img-fluid" alt="img">
+          <div class="d-flex justify-content-between p-3 bg-tertiary">
+            <p class="m-0 text-white">Sarha J.L</p>
+            <p class="m-0 fw-lighter text-white">Lecturer</p>
+          </div>
+        </div>
+        <div class="col text-center">
+          <img src="{% static 'presentation/img/teacher3.jpg' %}" class="img-fluid" alt="img">
+          <div class="d-flex justify-content-between p-3 bg-primary">
+            <p class="m-0 text-white">Telly H.S</p>
+            <p class="m-0 fw-lighter text-white">Director</p>
+          </div>
+        </div>
+        <div class="col text-center">
+          <img src="{% static 'presentation/img/teacher2.jpg' %}" class="img-fluid" alt="img">
+          <div class="d-flex justify-content-between p-3 bg-tertiary">
+            <p class="m-0 text-white">Jack M.L</p>
+            <p class="m-0 fw-lighter text-white">Lecturer</p>
+          </div>
+        </div>
+        <div class="col text-center">
+          <img src="{% static 'presentation/img/teacher1.jpg' %}" class="img-fluid" alt="img">
+          <div class="d-flex justify-content-between p-3 bg-primary">
+            <p class="m-0 text-white">Teressa D.O</p>
+            <p class="m-0 fw-lighter text-white">Executive</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <img class="position-absolute top-50 start-0 translate-middle-y z-n1 img-fluid" src="{% static 'presentation/img/pattern2.png' %}" alt="img">
+  </section>
+
+  <section id="facilities" class="position-relative padding-medium">
+    <div class="container facility-block z-1">
+      <div class="text-start p-5" style="background: #FBB911;">
+        <h2 class="display-5 fw-semibold">Our Facilities</h2>
+        <p>Immerse yourself in a conducive learning environment with our top-notch facilities. State-of-the-art
+          laboratories, extensive libraries, and modern classrooms create a setting where curiosity and exploration
+          flourish.</p>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="row g-3 mt-3 mt-lg-0">
+        <div class="col-md-6 text-center">
+          <div class="product-item position-relative bg-black overflow-hidden">
+            <img src="{% static 'presentation/img/facility1.jpg' %}" class="post-image img-fluid"  alt="img">
+            <div class="product-description position-absolute top-50 start-50 translate-middle p-3">
+              <h3 class="mb-2 display-6 text-white">Cafeteria</h3>
+              <p class="product-paragraph d-none d-lg-block m-0 text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Molestiae at illum ipsum similique doloribus.</p>
+              <a href="#">
+                <p class="text-decoration-underline text-white m-0 mt-2">More info</p>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 text-center">
+          <div class="product-item position-relative bg-black overflow-hidden">
+            <img src="{% static 'presentation/img/facility2.jpg' %}" class="post-image img-fluid"  alt="img">
+            <div class="product-description position-absolute top-50 start-50 translate-middle p-3">
+              <h3 class="mb-2 display-6 text-white">Classes</h3>
+              <p class="product-paragraph d-none d-lg-block m-0 text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Molestiae at illum ipsum similique doloribus.</p>
+              <a href="#">
+                <p class="text-decoration-underline text-white m-0 mt-2">More info</p>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 text-center">
+          <div class="product-item position-relative bg-black overflow-hidden">
+            <img src="{% static 'presentation/img/facility3.jpg' %}" class="post-image img-fluid"  alt="img">
+            <div class="product-description position-absolute top-50 start-50 translate-middle p-3">
+              <h3 class="mb-2 display-6 text-white">Environment</h3>
+              <p class="product-paragraph d-none d-lg-block m-0 text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Molestiae at illum ipsum similique doloribus.</p>
+              <a href="#">
+                <p class="text-decoration-underline text-white m-0 mt-2">More info</p>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 text-center">
+          <div class="product-item position-relative bg-black overflow-hidden">
+            <img src="{% static 'presentation/img/facility4.jpg' %}" class="post-image img-fluid"  alt="img">
+            <div class="product-description position-absolute top-50 start-50 translate-middle p-3">
+              <h3 class="mb-2 display-6 text-white">Library</h3>
+              <p class="product-paragraph d-none d-lg-block m-0 text-white">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Molestiae at illum ipsum similique doloribus.</p>
+              <a href="#">
+                <p class="text-decoration-underline text-white m-0 mt-2">More info</p>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+<section id="testimonial" class="position-relative">
+    <div class="container">
+      <h2 class="display-5 text-center fw-semibold">What our students say</h2>
+      <div class="review-content mt-5">
+        <div class="swiper testimonial-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="review-item">
+                <div class="review">
+                  <blockquote class="mb-0">
+                    <p class="mb-0">“We provide students with timely and tailored support & services. We offer culturally sensitive and engaged teach learning and assessment needs.”</p>
+                  </blockquote>
+                  <div class="review-star d-flex mt-2">
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="author-detail mt-4 d-flex align-items-center">
+                  <div class="author-text">
+                    <h6 class="name mb-0">James Rodrigo</h6>
+                    <span class="text-capitalize">Humanities</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="review-item">
+                <div class="review">
+                  <blockquote class="mb-0">
+                    <p class="mb-0">“We provide students with timely and tailored support & services. We offer culturally sensitive and engaged teach learning and assessment needs.”</p>
+                  </blockquote>
+                  <div class="review-star d-flex mt-2">
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="author-detail mt-4 d-flex align-items-center">
+                  <div class="author-text">
+                    <h6 class="name mb-0">James Rodrigo</h6>
+                    <span class="text-capitalize">Humanities</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="review-item">
+                <div class="review">
+                  <blockquote class="mb-0">
+                    <p class="mb-0">“We provide students with timely and tailored support & services. We offer culturally sensitive and engaged teach learning and assessment needs.”</p>
+                  </blockquote>
+                  <div class="review-star d-flex mt-2">
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="author-detail mt-4 d-flex align-items-center">
+                  <div class="author-text">
+                    <h6 class="name mb-0">James Rodrigo</h6>
+                    <span class="text-capitalize">Humanities</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="review-item">
+                <div class="review">
+                  <blockquote class="mb-0">
+                    <p class="mb-0">“We provide students with timely and tailored support & services. We offer culturally sensitive and engaged teach learning and assessment needs.”</p>
+                  </blockquote>
+                  <div class="review-star d-flex mt-2">
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="author-detail mt-4 d-flex align-items-center">
+                  <div class="author-text">
+                    <h6 class="name mb-0">James Rodrigo</h6>
+                    <span class="text-capitalize">Humanities</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="review-item">
+                <div class="review">
+                  <blockquote class="mb-0">
+                    <p class="mb-0">“We provide students with timely and tailored support & services. We offer culturally sensitive and engaged teach learning and assessment needs.”</p>
+                  </blockquote>
+                  <div class="review-star d-flex mt-2">
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                    <svg class="star me-1 text-warning" width="16" height="16">
+                      <use xlink:href="#star" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="author-detail mt-4 d-flex align-items-center">
+                  <div class="author-text">
+                    <h6 class="name mb-0">James Rodrigo</h6>
+                    <span class="text-capitalize">Humanities</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination position-relative mt-5"></div>
+        </div>
+      </div>
+    </div>
+    <img class="position-absolute top-50 end-0 translate-middle-y z-n1 img-fluid" src=" {% static 'presentation/img/pattern3.png' %}" alt="img">
+
+  </section>
+
+  {% show_latest_news 3 %}
+
+  <section id="subscribe" class="bg-background padding-medium">
+    <div class="container">
+      <div class="row align-items-center">
+
+        <div class="col-md-5 offset-md-1">
+          <h2 class="display-5 fw-semibold">Subscribe to Our Newsletter</h2>
+          <p>Stay in the loop with School news and updates</p>
+        </div>
+
+        <div class="col-md-5">
+          <form>
+            <div class="mb-3">
+              <input type="email" class="form-control form-control-lg rounded-0 fs-6 py-3" name="email" id="email" placeholder="Enter Email Address">
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-dark btn-lg rounded-0">Subscribe now</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+{% endblock %}

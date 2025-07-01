@@ -24,19 +24,26 @@ from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', include('presentation.urls', namespace='news')),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'), # Домашня сторінка ліцею
+    # path('', include('presentation.urls', namespace='presentation')),
+    # path('', TemplateView.as_view(template_name='home.html'), name='home'), # Домашня сторінка ліцею
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('', include('frontend.urls')),
-    # path('teacher/', include('frontend.urls')), # Включаємо URL-и додатку frontend
+    # path('', include('frontend.urls')),
+    path('teacher/', include('frontend.urls')),  # Включаємо URL-и додатку frontend
+
     # path('student/', include('frontend.urls')), # Додасте пізніше
     # path('parent/', include('frontend.urls')), # Додасте пізніше
-    path('news/', include('presentation.urls', namespace='news_detail')),
-    path('', include('users.urls')),
+
+    # path('news/', include('presentation.urls', namespace='news_detail')),
+    # path('', include('users.urls')),
+    path('', include('presentation.urls', namespace='presentation')),
+    path('news/', include('presentation.news_urls', namespace='news')),
     path('users/', include('users.urls')),
+
 ]
 
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
