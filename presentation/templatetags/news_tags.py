@@ -8,7 +8,7 @@ register = template.Library()
 
 
 @register.inclusion_tag('presentation/news/latest_news.html')
-def show_latest_news(count=2):
+def show_latest_news(count=3):
     latest_news = News.published.order_by('-publish')[:count]
     return {'latest_news': latest_news}
 

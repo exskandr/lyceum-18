@@ -2,6 +2,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count
 from taggit.models import Tag
+from users.models import User
 from .models import News, NavbarSubItem, DynamicPage
 from django.views.generic import DetailView
 
@@ -19,7 +20,18 @@ def index(request):
     """
     Відображає головну сторінку візитної картки ліцею.
     """
-    return render(request, 'presentation/index.html')
+    # sub_items = NavbarSubItem.objects.all().order_by('order')
+    # navbar = {}
+    # for category_key, category_label in NavbarSubItem.MAIN_CATEGORIES:
+    #     navbar[category_key] = {
+    #         'label': category_label,
+    #         'sub_items': sub_items.filter(category=category_key),
+    #     }
+
+    return render(
+        request,
+        'presentation/index.html',
+    )
 
 
 def home(request):

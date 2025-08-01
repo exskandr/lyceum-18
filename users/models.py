@@ -47,6 +47,28 @@ class User(AbstractUser):
         patronymic = getattr(self.profile, 'patronymic', '') if hasattr(self, 'profile') else ''
         return f"{self.last_name or ''} {self.first_name or ''} {patronymic or ''}".strip()
 
+    def get_initials_name(self):
+        """
+        Повертає ім'я у форматі: 'Прізвище І.П.'
+        """
+        last_name = self.last_name or ''
+        initials = []
+
+        if self.first_name:
+            initials.append(self.first_name[0].upper())
+
+        # Перевіряємо, чи існує пов'язаний об'єкт профілю
+        if hasattr(self, 'profile') and self.profile.patronymic:
+            patronymic = self.profile.patronymic
+            initials.append(patronymic[0].upper())
+
+        # Об'єднуємо всі частини в один рядок
+        initials_str = '.'.join(initials)
+        if initials_str:
+            return f"{last_name} {initials_str}."
+        else:
+            return f"{last_name}"
+
 
 class Profile(models.Model):
     user = models.OneToOneField(

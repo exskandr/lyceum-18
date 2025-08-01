@@ -16,7 +16,8 @@ class DynamicPage(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return f"/pages/{self.slug}/"
+        # return f"/pages/{self.slug}/"
+        return reverse('dynamic_page_detail', kwargs={'slug': self.slug})
 
 
 class NavbarSubItem(models.Model):
