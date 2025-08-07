@@ -1,0 +1,26 @@
+{% load static %}
+
+<div class="row g-0 mt-4">
+    {% for teacher in random_teachers %}
+    <div class="col text-center d-flex">
+       <a href="{% url 'teacher:teacher_detail' pk=teacher.pk %}" class="d-flex flex-column w-100">
+            <div>
+                {% if teacher.profile.photo %}
+                    <img src="{{ teacher.profile.photo.url }}" class="img-fluid" alt="{{ teacher.get_full_name_display }}">
+                {% else %}
+                    <img src="{% static 'users/images/default_profile.png' %}" class="img-fluid" alt="Без фото">
+                {% endif %}
+            </div>
+
+            <div class="d-flex flex-column justify-content-between p-3 flex-grow-1 {% if forloop.counter|divisibleby:2 %}bg-tertiary{% else %}bg-primary{% endif %}">
+                <div class="d-flex justify-content-between">
+                    <p class="m-0 text-white">{{ teacher.get_initials_name }}</p>
+                </div>
+                <div class="d-flex justify-content-end align-items-end flex-grow-0">
+                    <p class="m-0 fw-lighter text-end text-white">{{ teacher.profile.position|default:"Посада не вказана" }}</p>
+                </div>
+            </div>
+       </a>
+    </div>
+    {% endfor %}
+</div>
