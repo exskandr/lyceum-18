@@ -8,6 +8,8 @@ app_name = 'presentation'
 urlpatterns = [
     # path('', views.home, name='home'),
     path('', views.index, name='index'),
+    path('teachers/', views.teacher_list, name='teacher_list'),
+    path('teacher/<int:pk>/', views.teacher_detail, name='teacher_detail'),
     # path('news/', views.news_list, name='news_list'),  # Список новин
     # path('tag/<slug:tag_slug>/', views.news_list, name='news_list_by_tag'),
     # path(

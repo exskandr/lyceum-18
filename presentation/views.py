@@ -5,6 +5,9 @@ from taggit.models import Tag
 from users.models import User
 from .models import News, NavbarSubItem, DynamicPage
 from django.views.generic import DetailView
+from django.db.models import F
+from django.db.models.functions import Upper, Substr
+import string
 
 
 class DynamicPageView(DetailView):
@@ -32,6 +35,62 @@ def index(request):
         request,
         'presentation/index.html',
     )
+
+
+def teacher_list(request):
+    # Генеруємо список букв алфавіту для пошуку
+    available_letters = User.objects.filter(
+        role='teacher',
+        last_name__isnull=False
+    ).annotate(
+        initial=Upper(Substr('last_name', 1, 1))
+    ).values_list(
+        'initial', flat=True
+    ).distinct().order_by('initial')
+
+    # Отримуємо обрану літеру з URL
+    selected_letter = request.GET.get('letter')
+
+    # Отримуємо всіх вчителів і сортуємо їх
+    teachers_list = User.objects.filter(role='teacher').order_by(F('last_name').asc(nulls_last=True))
+
+    if selected_letter:
+        teachers_list = teachers_list.filter(last_name__istartswith=selected_letter)
+
+    # Додаємо пагінацію
+    paginator = Paginator(teachers_list, 3)  # 12 вчителів на сторінку
+    page_number = request.GET.get('page')
+
+    try:
+        teachers = paginator.page(page_number)
+    except PageNotAnInteger:
+        teachers = paginator.page(1)
+    except EmptyPage:
+        teachers = paginator.page(paginator.num_pages)
+
+    context = {
+        'teachers': teachers,
+        'available_letters': available_letters,
+        'selected_letter': selected_letter,
+    }
+    return render(request, 'presentation/teacher/teacher_list.html', context)
+
+
+def teacher_detail(request, pk):
+    # Отримуємо об'єкт вчителя, або повертаємо 404, якщо не знайдено
+    teacher = get_object_or_404(User, pk=pk, role='teacher')
+
+    # Перевіряємо, чи існує пов'язаний об'єкт профілю
+    # Це важливо, щоб уникнути помилок, якщо у користувача немає профілю
+    if not hasattr(teacher, 'profile'):
+        # Можна перенаправити або відобразити сторінку з помилкою
+        # Наприклад, teacher_detail.html може обробляти цей випадок
+        teacher.profile = None
+
+    context = {
+        'teacher': teacher,
+    }
+    return render(request, 'presentation/teacher/teacher_detail.html', context)
 
 
 def home(request):

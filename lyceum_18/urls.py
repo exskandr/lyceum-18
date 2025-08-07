@@ -34,10 +34,9 @@ urlpatterns = [
     # path('student/', include('frontend.urls')), # Додасте пізніше
     # path('parent/', include('frontend.urls')), # Додасте пізніше
 
-    # path('news/', include('presentation.urls', namespace='news_detail')),
-    # path('', include('users.urls')),
     path('', include('presentation.urls', namespace='presentation')),
     path('news/', include('presentation.news_urls', namespace='news')),
+    path('teachers/', include('presentation.teacher_urls', namespace='teacher')),
     path('users/', include('users.urls')),
 
 ]
